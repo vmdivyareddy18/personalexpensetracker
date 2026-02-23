@@ -138,3 +138,122 @@ button {
         box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
     }
 }
+
+/* Slide down animation */
+.expense-item {
+    background: #fff;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.expense-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.expense-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    font-size: 14px;
+    color: #555;
+    margin-top: 8px;
+}
+
+.expense-item.active .expense-details {
+    max-height: 200px;
+}
+
+#toggleBtn {
+    margin-left: 10px;
+    padding: 4px 10px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#toggleBtn:hover {
+    background: #1976D2;
+}
+
+.cards {
+    display: flex;
+    justify-content: space-around;
+    margin: 30px 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    width: 22%;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card p {
+    font-size: 92px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+
+
+/* Hero Section */
+
+.hero {
+    min-height: 90vh;
+    background: linear-gradient(to right, #adbbdb, #aabff6, #2563eb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    color: white;
+}
+
+/* ================= CARDS ================= */
+
+.cards {
+    display: flex;
+    justify-content: space-around;
+    margin: 30px 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    width: 22%;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card p {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* ================= CHARTS ================= */
+
+.charts {
+    display: flex;
+    justify-content: space-around;
+    margin: 30px 20px;
+}
+
+.chart-box {
+    background: white;
+    padding: 25px;
+    width: 45%;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}

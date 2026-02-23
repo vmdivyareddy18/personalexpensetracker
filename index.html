@@ -55,11 +55,51 @@
     </div>
 
     <div class="recent-section">
-        <h2>Recent Expenses</h2>
-        <div id="expenseList"></div>
+        <h2>
+            Recent Expenses
+            <button id="toggleBtn" onclick="toggleHistory()">Show</button>
+        </h2>
+        <div id="historyBox" style="display:none;">
+            <div id="expenseList"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+<!-- SUMMARY CARDS -->
+<div class="cards">
+    <div class="card">
+        <h4>Total Spent</h4>
+        <p id="totalSpent">₹0</p>
+    </div>
+
+    <div class="card">
+        <h4>Transactions</h4>
+        <p id="totalTransactions">0</p>
+    </div>
+
+    <div class="card">
+        <h4>Avg / Transaction</h4>
+        <p id="avgTransaction">₹0</p>
+    </div>
+
+    <div class="card">
+        <h4>Health Score</h4>
+        <p id="healthScore">100</p>
+    </div>
+</div>
+<!-- CHARTS -->
+<div class="charts">
+    <div class="chart-box">
+        <h3>Category Distribution</h3>
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+        <h3>Monthly Spending</h3>
+        <canvas id="barChart"></canvas>
+    </div>
+</div>
+============================
 
 </html>

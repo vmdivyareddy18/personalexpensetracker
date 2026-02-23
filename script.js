@@ -1,11 +1,25 @@
 // ===============================
-// 📦 Load Expenses From Storage
+// 📦 LOAD FROM STORAGE
 // ===============================
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
 
 // ===============================
-// ➕ Add Expense Function
+// 📊 CATEGORY TOTALS
+// ===============================
+let categoryTotals = {
+    Food: 0,
+    Shopping: 0,
+    Bills: 0,
+    Transport: 0,
+    Health: 0,
+    Entertainment: 0,
+    Others: 0
+};
+
+
+// ===============================
+// ➕ ADD EXPENSE
 // ===============================
 function addExpense() {
 
@@ -21,15 +35,18 @@ function addExpense() {
 
     let expense = {
         id: Date.now(),
-        amount: parseFloat(amount),
-        category: category,
-        date: date,
-        note: note
+        amount: Number(amount),
+        category,
+        date,
+        note,
+        language: document.getElementById("language").value
     };
 
     expenses.unshift(expense);
+
     localStorage.setItem("expenses", JSON.stringify(expenses));
 
+    recalculateCategoryTotals();
     renderExpenses();
     clearForm();
 
@@ -38,29 +55,73 @@ function addExpense() {
 
 
 // ===============================
-// 📋 Render Expenses
+// 🧾 RENDER HISTORY
 // ===============================
 function renderExpenses() {
 
-    let list = document.getElementById("expenseList");
+    const list = document.getElementById("expenseList");
+
     list.innerHTML = "";
 
+    if (expenses.length === 0) {
+        list.innerHTML = "<p>No expenses yet</p>";
+        return;
+    }
+
     expenses.forEach(exp => {
-        let div = document.createElement("div");
+
+        const div = document.createElement("div");
         div.className = "expense-item";
+
         div.innerHTML = `
-            ₹${exp.amount} - ${exp.category} (${exp.date})
-            <br><small>${exp.note || ""}</small>
+            <div class="expense-header">
+                <span>₹${exp.amount} - ${exp.category}</span>
+                <span>${exp.date}</span>
+            </div>
+
+            <div class="expense-details">
+                <p><b>Note:</b> ${exp.note || "No note"}</p>
+                <p><b>Language:</b> ${exp.language}</p>
+            </div>
         `;
+
+        div.addEventListener("click", () => {
+            div.classList.toggle("active");
+        });
+
         list.appendChild(div);
+    });
+
+    updateDashboard();
+}
+
+
+// ===============================
+// 🧮 RECALCULATE TOTALS
+// ===============================
+function recalculateCategoryTotals() {
+
+    Object.keys(categoryTotals).forEach(key => {
+        categoryTotals[key] = 0;
+    });
+
+    expenses.forEach(e => {
+
+        if (categoryTotals[e.category] !== undefined) {
+            categoryTotals[e.category] += e.amount;
+        } else {
+            categoryTotals.Others += e.amount;
+        }
+
     });
 }
 
 
 // ===============================
-// 🧹 Clear Form
+// 🧹 CLEAR FORM
 // ===============================
 function clearForm() {
+
     document.getElementById("amount").value = "";
     document.getElementById("category").value = "";
     document.getElementById("date").value = "";
@@ -69,7 +130,28 @@ function clearForm() {
 
 
 // ===============================
-// 🎤 VOICE RECOGNITION SYSTEM
+// 👁️ TOGGLE HISTORY
+// ===============================
+function toggleHistory() {
+
+    const box = document.getElementById("historyBox");
+    const btn = document.getElementById("toggleBtn");
+
+    if (box.style.display === "none") {
+
+        box.style.display = "block";
+        btn.innerText = "Hide";
+
+    } else {
+
+        box.style.display = "none";
+        btn.innerText = "Show";
+    }
+}
+
+
+// ===============================
+// 🎤 VOICE SYSTEM
 // ===============================
 const micBtn = document.getElementById("micBtn");
 const noteInput = document.getElementById("note");
@@ -80,96 +162,196 @@ const languageSelect = document.getElementById("language");
 let recognition;
 let isRecording = false;
 
+
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
     recognition = new SpeechRecognition();
 
     recognition.continuous = true;
     recognition.interimResults = false;
+
 
     micBtn.addEventListener("click", () => {
 
         recognition.lang = languageSelect.value;
 
         if (!isRecording) {
+
             recognition.start();
-            micBtn.classList.add("recording");
+
             micBtn.innerText = "🔴";
             isRecording = true;
+
         } else {
+
             recognition.stop();
         }
     });
 
+
     recognition.onresult = function (event) {
 
-        const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+        const transcript =
+            event.results[event.results.length - 1][0].transcript.toLowerCase();
+
         processVoiceCommand(transcript);
     };
 
+
     recognition.onend = function () {
-        micBtn.classList.remove("recording");
+
         micBtn.innerText = "🎤";
         isRecording = false;
     };
 
-} else {
-    micBtn.disabled = true;
-    micBtn.innerText = "❌";
-    alert("Speech Recognition not supported. Use Google Chrome.");
 }
 
 
 // ===============================
-// 🧠 Smart Voice Processing
+// 🧠 PROCESS VOICE
 // ===============================
 function processVoiceCommand(text) {
 
-    console.log("Voice Input:", text);
+    console.log("Voice:", text);
 
-    // Detect amount (numbers)
     const amountMatch = text.match(/\d+/);
+
     if (amountMatch) {
         amountInput.value = amountMatch[0];
     }
 
-    // Detect category
+
     const categories = ["food", "transport", "bills", "shopping", "health", "entertainment"];
 
     categories.forEach(cat => {
+
         if (text.includes(cat)) {
-            categorySelect.value = cat.charAt(0).toUpperCase() + cat.slice(1);
+
+            categorySelect.value =
+                cat.charAt(0).toUpperCase() + cat.slice(1);
         }
     });
 
-    // Detect "today"
+
     if (text.includes("today")) {
+
         const today = new Date().toISOString().split("T")[0];
+
         document.getElementById("date").value = today;
     }
 
-    // Set entire text as note
+
     noteInput.value = text;
 }
 
 
 // ===============================
-// 🔊 Text To Speech (Voice Reply)
+// 🔊 SPEAK
 // ===============================
-function speak(message) {
+function speak(msg) {
 
     const speech = new SpeechSynthesisUtterance();
-    speech.text = message;
-    speech.lang = languageSelect ? languageSelect.value : "en-US";
-    speech.rate = 1;
-    speech.pitch = 1;
+
+    speech.text = msg;
+
+    speech.lang = languageSelect.value || "en-US";
 
     window.speechSynthesis.speak(speech);
 }
 
 
 // ===============================
-// 🚀 Initialize
+// 📈 CHARTS
 // ===============================
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+const barCtx = document.getElementById('barChart').getContext('2d');
+
+
+let pieChart = new Chart(pieCtx, {
+
+    type: 'pie',
+
+    data: {
+        labels: Object.keys(categoryTotals),
+
+        datasets: [{
+            data: Object.values(categoryTotals),
+
+            backgroundColor: [
+                '#3b82f6', '#10b981', '#f59e0b',
+                '#ef4444', '#8b5cf6', '#ec4899',
+                '#6b7280'
+            ]
+        }]
+    }
+});
+
+
+let barChart = new Chart(barCtx, {
+
+    type: 'bar',
+
+    data: {
+        labels: ['Total'],
+
+        datasets: [{
+            label: 'Monthly Spending',
+
+            data: [0],
+
+            backgroundColor: '#3b82f6'
+        }]
+    }
+});
+
+
+// ===============================
+// 📊 DASHBOARD
+// ===============================
+function updateDashboard() {
+
+    let total = 0;
+
+    expenses.forEach(e => total += e.amount);
+
+    let transactions = expenses.length;
+
+    let avg = transactions ? (total / transactions).toFixed(2) : 0;
+
+
+    let score =
+        total < 5000 ? 90 :
+            total < 10000 ? 70 : 50;
+
+
+    document.getElementById("totalSpent").innerText = "₹" + total;
+
+    document.getElementById("totalTransactions").innerText = transactions;
+
+    document.getElementById("avgTransaction").innerText = "₹" + avg;
+
+    document.getElementById("healthScore").innerText = score;
+
+
+    pieChart.data.datasets[0].data =
+        Object.values(categoryTotals);
+
+    pieChart.update();
+
+
+    barChart.data.datasets[0].data = [total];
+
+    barChart.update();
+}
+
+
+// ===============================
+// 🚀 INIT
+// ===============================
+recalculateCategoryTotals();
 renderExpenses();
+
+document.getElementById("historyBox").style.display = "none";
+document.getElementById("toggleBtn").innerText = "Show";
