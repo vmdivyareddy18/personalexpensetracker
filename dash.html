@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Finova Dashboard</title>
+    <link rel="stylesheet" href="style10.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <img src="img.png" alt="logo" class="logo">
+
+        <div>
+            <a href="home.html">Home</a>
+            <a href="index.html">Dashboard</a>
+            <a href="add-expense.html">Add Expense</a>
+        </div>
+    </div>
+
+    <!-- SUMMARY CARDS -->
+    <div class="cards">
+        <div class="card">
+            <h4>Total Spent</h4>
+            <p id="totalSpent">₹0</p>
+        </div>
+
+        <div class="card">
+            <h4>Transactions</h4>
+            <p id="totalTransactions">0</p>
+        </div>
+
+        <div class="card">
+            <h4>Avg / Transaction</h4>
+            <p id="avgTransaction">₹0</p>
+        </div>
+
+        <div class="card">
+            <h4>Health Score</h4>
+            <p id="healthScore">100</p>
+        </div>
+    </div>
+
+
+
+    <!-- FINANCIAL HEALTH -->
+    <div class="health-summary">
+        <h3>Financial Health Summary</h3>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="healthProgressBar">100%</div>
+        </div>
+
+        <p id="healthSummaryText">
+            Your spending is under control.
+        </p>
+    </div>
+
+
+
+    <!-- CHARTS -->
+    <div class="charts">
+        <div class="chart-box">
+            <h3>Category Distribution</h3>
+            <canvas id="pieChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+            <h3>Monthly Spending</h3>
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
