@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Expense</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+    <a href="dashboard.html">Dashboard</a>
+    <a href="add-expense.html">Add Expense</a>
+
+
+    <h1 style="text-align:center;">Add Expense</h1>
+
+    <div class="form-card">
+
+        <label>Amount (₹)</label>
+        <input type="number" id="amount">
+
+        <label>Category</label>
+        <select id="category">
+            <option value="">Select</option>
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Bills</option>
+            <option>Shopping</option>
+            <option>Health</option>
+            <option>Entertainment</option>
+        </select>
+
+        <label>Date</label>
+        <input type="date" id="date">
+
+        <label>Language</label>
+        <select id="language">
+            <option value="en-US">English</option>
+            <option value="hi-IN">Hindi</option>
+            <option value="kn-IN">Kannada</option>
+            <option value="ta-IN">Tamil</option>
+            <option value="te-IN">Telugu</option>
+        </select>
+
+        <label>Note</label>
+        <div class="note-container">
+            <input type="text" id="note" placeholder="Speak or type note...">
+            <button type="button" id="micBtn" class="mic-btn">
+                🎤
+            </button>
+        </div>
+
+        <button type="button" onclick="addExpense()">+ Add Expense</button>
+    </div>
+
+    <div class="recent-section">
+        <h2>Recent Expenses</h2>
+        <div id="expenseList"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
