@@ -27,6 +27,7 @@ function addExpense() {
     let category = document.getElementById("category").value;
     let date = document.getElementById("date").value;
     let note = document.getElementById("note").value;
+    let language = document.getElementById("language").value;
 
     if (!amount || !category || !date) {
         alert("Fill all required fields");
@@ -39,7 +40,7 @@ function addExpense() {
         category,
         date,
         note,
-        language: document.getElementById("language").value
+        language
     };
 
     expenses.unshift(expense);
@@ -60,7 +61,6 @@ function addExpense() {
 function renderExpenses() {
 
     const list = document.getElementById("expenseList");
-
     list.innerHTML = "";
 
     if (expenses.length === 0) {
@@ -112,7 +112,6 @@ function recalculateCategoryTotals() {
         } else {
             categoryTotals.Others += e.amount;
         }
-
     });
 }
 
@@ -138,12 +137,9 @@ function toggleHistory() {
     const btn = document.getElementById("toggleBtn");
 
     if (box.style.display === "none") {
-
         box.style.display = "block";
         btn.innerText = "Hide";
-
     } else {
-
         box.style.display = "none";
         btn.innerText = "Show";
     }
@@ -165,7 +161,8 @@ let isRecording = false;
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
 
     recognition = new SpeechRecognition();
 
@@ -180,7 +177,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         if (!isRecording) {
 
             recognition.start();
-
             micBtn.innerText = "🔴";
             isRecording = true;
 
@@ -214,8 +210,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 // ===============================
 function processVoiceCommand(text) {
 
-    console.log("Voice:", text);
-
     const amountMatch = text.match(/\d+/);
 
     if (amountMatch) {
@@ -223,7 +217,8 @@ function processVoiceCommand(text) {
     }
 
 
-    const categories = ["food", "transport", "bills", "shopping", "health", "entertainment"];
+    const categories =
+        ["food", "transport", "bills", "shopping", "health", "entertainment"];
 
     categories.forEach(cat => {
 
@@ -237,7 +232,8 @@ function processVoiceCommand(text) {
 
     if (text.includes("today")) {
 
-        const today = new Date().toISOString().split("T")[0];
+        const today =
+            new Date().toISOString().split("T")[0];
 
         document.getElementById("date").value = today;
     }
@@ -255,7 +251,6 @@ function speak(msg) {
     const speech = new SpeechSynthesisUtterance();
 
     speech.text = msg;
-
     speech.lang = languageSelect.value || "en-US";
 
     window.speechSynthesis.speak(speech);
@@ -263,7 +258,7 @@ function speak(msg) {
 
 
 // ===============================
-// 📈 CHARTS
+// 📈 CHART SETUP
 // ===============================
 const pieCtx = document.getElementById('pieChart').getContext('2d');
 const barCtx = document.getElementById('barChart').getContext('2d');
@@ -327,11 +322,8 @@ function updateDashboard() {
 
 
     document.getElementById("totalSpent").innerText = "₹" + total;
-
     document.getElementById("totalTransactions").innerText = transactions;
-
     document.getElementById("avgTransaction").innerText = "₹" + avg;
-
     document.getElementById("healthScore").innerText = score;
 
 
@@ -350,8 +342,16 @@ function updateDashboard() {
 // ===============================
 // 🚀 INIT
 // ===============================
-recalculateCategoryTotals();
-renderExpenses();
+window.onload = function () {
 
-document.getElementById("historyBox").style.display = "none";
-document.getElementById("toggleBtn").innerText = "Show";
+    recalculateCategoryTotals();
+    renderExpenses();
+
+    const historyBox = document.getElementById("historyBox");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    if (historyBox && toggleBtn) {
+        historyBox.style.display = "none";
+        toggleBtn.innerText = "Show";
+    }
+};
